@@ -1,0 +1,12 @@
+{
+  "name": "bull-stack",
+  "version": "1",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@bull-board/express": "^4.6.4",
+    "bull": "^4.10.1",
+    "bullmq": "^3.2.2",
+    "express": "^4.18.2"
+  }
+}

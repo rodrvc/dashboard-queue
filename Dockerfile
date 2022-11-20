@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 # Create app directory
 WORKDIR /usr/src/bull-queue
@@ -15,5 +15,5 @@ RUN yarn install
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
+EXPOSE 3000 
 CMD [ "node", "index.js" ]

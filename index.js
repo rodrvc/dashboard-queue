@@ -11,12 +11,15 @@ const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 
 const myQueue = new Queue('foo' ,  {
-    redis: { port: 6379, host: '127.0.0.1', password: '' }});
+    redis: { port: 6379, host: 'redis'}});
 
 const addJobs = () => {
      myQueue.add('myJobName', { foo: 'bar' });
      myQueue.add('myJobName', { qux: 'baz' });
-    console.log('jobs are added!')
+    console.log('jobs are    added!')
+
+    console.log({myQueue})
+    console.log("this is es")
 }
 
 addJobs();
@@ -30,6 +33,10 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
 });
 
 app.use('/admin/queues', serverAdapter.getRouter());
+
+app.use('/', function(){
+    console.log('yeah')
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

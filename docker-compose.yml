@@ -4,7 +4,10 @@ services:
     build: .
     ports:
       - "3000:3000"
+      
     volumes:
       - .:/code
   redis:
     image: "redis:alpine"
+
+#https://github.com/docker/awesome-compose/blob/master/nginx-nodejs-redis/compose.yaml

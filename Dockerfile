@@ -1,4 +1,4 @@
-FROM node:18
+FROM node: 18-alpine3.15
 
 # Create app directory
 WORKDIR /usr/src/bull-queue

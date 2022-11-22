@@ -1,4 +1,4 @@
-FROM node: 18-alpine3.15
+FROM node:18-alpine3.15
 
 # Create app directory
 WORKDIR /usr/src/bull-queue
@@ -16,4 +16,7 @@ RUN yarn install
 COPY . .
 
 EXPOSE 3000 
-CMD [ "node", "index.js" ]
+
+RUN ["chmod", "+x", "/usr/src/bull-queue/start.sh"]
+
+CMD sh start.sh

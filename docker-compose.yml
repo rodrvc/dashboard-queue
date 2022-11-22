@@ -6,7 +6,7 @@ services:
       - "3000:3000"
       
     volumes:
-      - .:/code
+      - .:/usr/src/bull-queue
   redis:
     image: "redis:alpine"
 

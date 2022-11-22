@@ -4,7 +4,7 @@ const port = 3000
 
 
 // const Queue = require('bull');
-import { ErrorCode, Queue, UnrecoverableError } from 'bullmq';
+import { ErrorCode, Queue, RedisConnection, UnrecoverableError, WORKER_SUFFIX } from 'bullmq';
 
 // const queue = new Queue('Paint');
 
@@ -20,14 +20,19 @@ const { BullAdapter } = require('@bull-board/api/bullAdapter');
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 
-const myQueue = new Queue('foo', connection);
+const myQueue1 = new Queue('nodo 1', connection);
+const myQueue2 = new Queue('Node 2', connection);
 
 const addJobs = () => {
-    myQueue.add('myJobName', { name: 'bar' });
-    myQueue.add('myJobName', { name: 'baz' });
-    console.log('jobs are    added!')
+    myQueue1.add('banco_estado1', { name: 'bar' });
+    myQueue1.add('banco_estado2', { name: 'baz' });
+    myQueue1.add('banco_estado3', { name: 'bar' });
+    myQueue1.add('banco_estado4', { name: 'baz' });
+    myQueue1.add('banco_estado5', { name: 'bar' });
+    myQueue1.add('banco_estado6', { name: 'baz' });
 
-    console.log({ myQueue })
+
+    console.log('jobs are    added!')
     console.log("this is es1")
 }
 
@@ -35,44 +40,60 @@ addJobs();
 
 
 import { Worker, Job } from 'bullmq';
-import { hostname } from 'os';
-import { hasUncaughtExceptionCaptureCallback } from 'process';
+const concurrency = { concurrency: 10 }
+
+const fakeRequest = () => {
+    setTimeout(function(){
+        console.log('se logo')
+    }, 1000);
+}
+
+const funcx = async (job: Job) => {
+    // Do something with job
+    // if (job.name == "myJobName") {
+    //     await ProcessQueue(job);
+    // }
+    console.log(`the job is working right now ${job.name}`)
+    await ProcessQueue(job);
+    // throw new Error("This error is great");
+    console.log('the execution continues!');
+    job.updateProgress(80)
+    return await fetch('www.google.cl');
+}
 
 const worker = new Worker(
-    'foo',
-    async (job: Job) => {
-        // Do something with job
-        if (job.name == "myJobName") {
-            await ProcessQueue(job);
-        }
-        console.log('the job is working right now')
-
-        throw new Error("This error is great");
-        
-        return 'some value';
-
-
-
-    }, connection);
+    'nodo 1', funcx
+    , {
+        concurrency: 1,
+        connection: {
+            port: 6379,
+            host: 'redis'
+        }, 
+        metrics: {
+            maxDataPoints: 3
+          },
+    },
+);
 
 
-const ProcessQueue = (job: Job) => {
-    setTimeout(function (job) {
+
+const ProcessQueue = async (job: Job) => {
+    await setTimeout(function (job) {
         console.log(`This job is done! ${job.data.name} is processing `);
         try {
-            throw "this is an error!"
-
+            console.log(`Crawler could not get transfers ${job.name}`)
+            throw new Error("Crawler could not get transfers")
         } catch (error) {
 
         }
-    }, 3000, job)
+    }, 10000, job)
 }
 
 const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath('/admin/queues');
 
 const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
-    queues: [new BullAdapter(myQueue)],
+    queues: [new BullMQAdapter(myQueue1), new BullMQAdapter(myQueue2)],
     serverAdapter: serverAdapter,
 });
 

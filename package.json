@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "ts-node-dev index.ts",
     "prod": "tsc && node ./build/index.js",
-    "tsc" : "tsc"
+    "tsc": "tsc"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",

@@ -1,8 +1,9 @@
-// const queue = new Queue('Paint');
-// queue.add('cars', { color: 'blue' });
+import * as dotenv from "dotenv";
+dotenv.config();
+
 export const connection = {
     connection: {
-        host: "redis",
-        port: 6379
+        host: process.env.HOST || '172.17.0.1',
+        port: parseInt(<string>process.env.PORT ) || 6379
     }
 };

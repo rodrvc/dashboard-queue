@@ -1,15 +1,18 @@
 import { Queue } from 'bullmq';
-import { connection } from '../../config/connection';
+// import { connection } from '../../config/connection.mjs';
+import 'dotenv/config'
+import  { connection }  from '../../config/connection';
 
 
+console.log(connection)
 const { createBullBoard } = require('@bull-board/api');
-const { BullAdapter } = require('@bull-board/api/bullAdapter');
+const { BullAdapter } = require('@bull-board/api/bullAdapter'); //to work just with bull
 const { BullMQAdapter } = require('@bull-board/api/bullMQAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 
-const mainQueue = new Queue('parent', connection);
-const queueNode1 = new Queue('Node 1', connection);
-const queueNode2 = new Queue('Node 2', connection);
+const mainQueue = new Queue('parent', connection );
+const queueNode1 = new Queue('Node 1', connection );
+const queueNode2 = new Queue('Node 2', connection );
 
 
 
